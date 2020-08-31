@@ -239,24 +239,16 @@ func getChannel(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	channels := []ChannelInfo{}
-	err = db.Select(&channels, "SELECT * FROM channel ORDER BY id")
+	channel := ChannelInfo{}
+	err = db.Select(&channel, "SELECT * FROM channel WHERE id = ?", channel_id)
 	if err != nil {
 		return err
 	}
 
-	var desc string
-	for _, ch := range channels {
-		if ch.ID == int64(cID) {
-			desc = ch.Description
-			break
-		}
-	}
 	return c.Render(http.StatusOK, "channel", map[string]interface{}{
 		"ChannelID":   cID,
-		"Channels":    channels,
 		"User":        user,
-		"Description": desc,
+		"Description": channel.Description,
 	})
 }
 
