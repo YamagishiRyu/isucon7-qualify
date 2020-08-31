@@ -732,6 +732,14 @@ func tRange(a, b int64) []int64 {
 
 func main() {
 	e := echo.New()
+
+	nrConf := newrelic.NewConfig("isucon7-qualify", "f1268556c28bc6b4a983e244f72ade91b0c3NRAL")
+    newRelicApp, err := newrelic.NewApplication(nrConf)
+    if err != nil {
+        panic(err)
+    }
+	e.Use(mw.NewRelicWithApplication(newRelicApp))
+
 	funcs := template.FuncMap{
 		"add":    tAdd,
 		"xrange": tRange,
