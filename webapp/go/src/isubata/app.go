@@ -22,7 +22,9 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo-contrib/session"
+	mw "github.com/dafiti/echo-middleware"
 	"github.com/labstack/echo/middleware"
+	"github.com/newrelic/go-agent"
 )
 
 const (
@@ -742,6 +744,13 @@ func main() {
 		Format: "request:\"${method} ${uri}\" status:${status} latency:${latency} (${latency_human}) bytes:${bytes_out}\n",
 	}))
 	e.Use(middleware.Static("../public"))
+
+	nrConf := newrelic.NewConfig("isucon7-qualify", "f1268556c28bc6b4a983e244f72ade91b0c3NRAL")
+    newRelicApp, err := newrelic.NewApplication(nrConf)
+    if err != nil {
+        panic(err)
+    }
+	e.Use(mw.NewRelicWithApplication(newRelicApp))
 
 	e.GET("/initialize", getInitialize)
 	e.GET("/", getIndex)
