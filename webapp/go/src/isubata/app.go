@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	crand "crypto/rand"
 	"crypto/sha1"
 	"database/sql"
@@ -17,6 +18,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/go-redis/redis"
 	"github.com/go-sql-driver/mysql"
 	"github.com/gorilla/sessions"
 	"github.com/jmoiron/sqlx"
@@ -33,7 +35,9 @@ const (
 
 var (
 	db            *sqlx.DB
+	rdb           *redis.Client
 	ErrBadReqeust = echo.NewHTTPError(http.StatusBadRequest)
+	ctx           = context.Background()
 )
 
 type Renderer struct {
@@ -83,6 +87,16 @@ func init() {
 	db.SetMaxOpenConns(20)
 	db.SetConnMaxLifetime(5 * time.Minute)
 	log.Printf("Succeeded to connect db.")
+
+	rdb = redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+
+	pong, err := rdb.Ping(ctx).Result()
+	fmt.Println(pong, err)
+	// Output: PONG <nil>
 }
 
 type User struct {
@@ -112,6 +126,29 @@ func addMessage(channelID, userID int64, content string) (int64, error) {
 		channelID, userID, content)
 	if err != nil {
 		return 0, err
+	}
+
+	key := "chID:" + strconv.FormatInt(channelID, 10) + "-count"
+	cnt, err := rdb.Get(ctx, key).Int64()
+	if err != nil {
+		if err == redis.Nil {
+			err = db.Get(&cnt,
+				"SELECT COUNT(*) as cnt FROM message WHERE channel_id = ?",
+				channelID)
+			if err != nil {
+				return 0, err
+			}
+
+			err = rdb.Set(ctx, key, cnt, 0).Err()
+			if err != nil {
+				return 0, err
+			}
+		}
+	} else {
+		err = rdb.Set(ctx, key, cnt+1, 0).Err()
+		if err != nil {
+			return 0, err
+		}
 	}
 	return res.LastInsertId()
 }
@@ -465,9 +502,23 @@ func fetchUnread(c echo.Context) error {
 				"SELECT COUNT(*) as cnt FROM message WHERE channel_id = ? AND ? < id",
 				chID, lastID)
 		} else {
-			err = db.Get(&cnt,
-				"SELECT COUNT(*) as cnt FROM message WHERE channel_id = ?",
-				chID)
+			key := "chID:" + strconv.FormatInt(chID, 10) + "-count"
+			cnt, err = rdb.Get(ctx, key).Int64()
+			if err != nil {
+				if err == redis.Nil {
+					err = db.Get(&cnt,
+						"SELECT COUNT(*) as cnt FROM message WHERE channel_id = ?",
+						chID)
+					if err != nil {
+						return err
+					}
+
+					err = rdb.Set(ctx, key, cnt, 0).Err()
+					if err != nil {
+						return err
+					}
+				}
+			}
 		}
 		if err != nil {
 			return err
