@@ -20,14 +20,14 @@ import (
 
 	"github.com/go-redis/redis"
 	"github.com/go-sql-driver/mysql"
-	_ "github.com/newrelic/go-agent/v3/integrations/nrmysql"
 	"github.com/gorilla/sessions"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/middleware"
-	"github.com/newrelic/go-agent/v3/newrelic"
 	"github.com/newrelic/go-agent/v3/integrations/nrecho-v3"
+	_ "github.com/newrelic/go-agent/v3/integrations/nrmysql"
+	"github.com/newrelic/go-agent/v3/newrelic"
 )
 
 const (
@@ -248,6 +248,10 @@ func getInitialize(c echo.Context) error {
 	db.MustExec("DELETE FROM channel WHERE id > 10")
 	db.MustExec("DELETE FROM message WHERE id > 10000")
 	db.MustExec("DELETE FROM haveread")
+	err := rdb.FlushAll(ctx).Error()
+	if err != nil {
+		return c.String(500, "")
+	}
 	return c.String(204, "")
 }
 
@@ -784,14 +788,14 @@ func tRange(a, b int64) []int64 {
 
 func main() {
 	app, err := newrelic.NewApplication(
-			newrelic.ConfigAppName("isucon7-qualify"),
-			newrelic.ConfigLicense("f1268556c28bc6b4a983e244f72ade91b0c3NRAL"),
-			newrelic.ConfigDebugLogger(os.Stdout),
-		)
-		if nil != err {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+		newrelic.ConfigAppName("isucon7-qualify"),
+		newrelic.ConfigLicense("f1268556c28bc6b4a983e244f72ade91b0c3NRAL"),
+		newrelic.ConfigDebugLogger(os.Stdout),
+	)
+	if nil != err {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
 	e := echo.New()
 	e.Use(nrecho.Middleware(app))
