@@ -2,14 +2,6 @@
 
 
 [[projects]]
-  digest = "1:e64e0aa5e5a9b411cd0814951103183c3033adf41ab996f16cc2ec7a1473ac30"
-  name = "github.com/dafiti/echo-middleware"
-  packages = ["."]
-  pruneopts = ""
-  revision = "e57a87d075eac2f1490212e8ad0e41be0de41fc1"
-  version = "0.4.0"
-
-[[projects]]
   digest = "1:bb522d6790c531be0b6631f1110e47623d3307672d66749054fa31ddd8878a7d"
   name = "github.com/dgrijalva/jwt-go"
   packages = ["."]
@@ -24,6 +16,20 @@
   pruneopts = ""
   revision = "17ef3dd9d98b69acec3e85878995ada9533a9370"
   version = "v1.5.0"
+
+[[projects]]
+  digest = "1:02c7a8570f619bdb5620e8f6a16407455c8e63433d8a9e829f618813dc7f89a5"
+  name = "github.com/golang/protobuf"
+  packages = [
+    "proto",
+    "ptypes",
+    "ptypes/any",
+    "ptypes/duration",
+    "ptypes/timestamp",
+  ]
+  pruneopts = ""
+  revision = "d04d7b157bb510b1e0c10132224b616ac0e26b17"
+  version = "v1.4.2"
 
 [[projects]]
   digest = "1:20ed7daa9b3b38b6d1d39b48ab3fd31122be5419461470d0c28de3e121c93ecf"
@@ -59,14 +65,6 @@
   ]
   pruneopts = ""
   revision = "d9bd385d68c068f1fabb5057e3dedcbcbb039d0f"
-
-[[projects]]
-  digest = "1:bc1620e5da7b137ec9b19834fedd16ad491c68c29fa2bf075b0eeec9c447556d"
-  name = "github.com/konsorten/go-windows-terminal-sequences"
-  packages = ["."]
-  pruneopts = ""
-  revision = "edb144dfd453055e1e49a3d8b410a660b5a87613"
-  version = "v1.0.3"
 
 [[projects]]
   digest = "1:edb8609e03d83162586349c904496f6033a8b98c88c45ff05fda93a6d22c3a04"
@@ -120,25 +118,21 @@
   digest = "1:2195231f5ec859dd4564cb096da1d0e3c2380c1834709810b4a6d330a7c782c9"
   name = "github.com/newrelic/go-agent"
   packages = [
-    ".",
-    "internal",
-    "internal/cat",
-    "internal/jsonx",
-    "internal/logger",
-    "internal/sysinfo",
-    "internal/utilization",
+    "v3/integrations/nrecho-v3",
+    "v3/integrations/nrmysql",
+    "v3/internal",
+    "v3/internal/cat",
+    "v3/internal/com_newrelic_trace_v1",
+    "v3/internal/jsonx",
+    "v3/internal/logger",
+    "v3/internal/sysinfo",
+    "v3/internal/utilization",
+    "v3/newrelic",
+    "v3/newrelic/sqlparse",
   ]
   pruneopts = ""
   revision = "0a47b5f46a812fcf2ce90f4fd3401394b00694d5"
   version = "v3.8.1"
-
-[[projects]]
-  digest = "1:f1ce6edca10c753e86727ef53ee19c4e83969d259a8dd9eb453bc3e3002d82d5"
-  name = "github.com/sirupsen/logrus"
-  packages = ["."]
-  pruneopts = ""
-  revision = "60c74ad9be0d874af0ab0daef6ab07c5c5911f0d"
-  version = "v1.6.0"
 
 [[projects]]
   branch = "master"
@@ -169,24 +163,161 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:e6ca5e605d7f2246795405e8fc66020fed675d0061572bd71d96b3416a46ac32"
+  name = "golang.org/x/net"
+  packages = [
+    "http/httpguts",
+    "http2",
+    "http2/hpack",
+    "idna",
+    "internal/timeseries",
+    "trace",
+  ]
+  pruneopts = ""
+  revision = "c89045814202410a2d67ec20ecf177ec77ceae7f"
+
+[[projects]]
+  branch = "master"
   digest = "1:22c1bb5e26d513aa2094bd4544b21bfe818dd6b734c448b3e128d1a53b590a31"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = ""
   revision = "43eea11bc92608addb41b8a406b0407495c106f6"
 
+[[projects]]
+  digest = "1:fccda34e4c58111b1908d8d69bf8d57c41c8e2542bc18ec8cd38c4fa21057f71"
+  name = "golang.org/x/text"
+  packages = [
+    "collate",
+    "collate/build",
+    "internal/colltab",
+    "internal/gen",
+    "internal/language",
+    "internal/language/compact",
+    "internal/tag",
+    "internal/triegen",
+    "internal/ucd",
+    "language",
+    "secure/bidirule",
+    "transform",
+    "unicode/bidi",
+    "unicode/cldr",
+    "unicode/norm",
+    "unicode/rangetable",
+  ]
+  pruneopts = ""
+  revision = "23ae387dee1f90d29a23c0e87ee0b46038fbed0e"
+  version = "v0.3.3"
+
+[[projects]]
+  branch = "master"
+  digest = "1:83fb8c0db5c03882877578d6074a2036c9059c346ba7d8b8b3ca169e3e67fb7f"
+  name = "google.golang.org/genproto"
+  packages = ["googleapis/rpc/status"]
+  pruneopts = ""
+  revision = "d751682dd1038b2274391fec637b1a9c366d9a0a"
+
+[[projects]]
+  digest = "1:63d30f7ecb713888bdfcbefb5a0e871439ec8fa6e3be556c98427a2a60ae431d"
+  name = "google.golang.org/grpc"
+  packages = [
+    ".",
+    "attributes",
+    "backoff",
+    "balancer",
+    "balancer/base",
+    "balancer/grpclb/state",
+    "balancer/roundrobin",
+    "binarylog/grpc_binarylog_v1",
+    "codes",
+    "connectivity",
+    "credentials",
+    "credentials/internal",
+    "encoding",
+    "encoding/proto",
+    "grpclog",
+    "internal",
+    "internal/backoff",
+    "internal/balancerload",
+    "internal/binarylog",
+    "internal/buffer",
+    "internal/channelz",
+    "internal/credentials",
+    "internal/envconfig",
+    "internal/grpclog",
+    "internal/grpcrand",
+    "internal/grpcsync",
+    "internal/grpcutil",
+    "internal/resolver/dns",
+    "internal/resolver/passthrough",
+    "internal/serviceconfig",
+    "internal/status",
+    "internal/syscall",
+    "internal/transport",
+    "keepalive",
+    "metadata",
+    "peer",
+    "resolver",
+    "serviceconfig",
+    "stats",
+    "status",
+    "tap",
+  ]
+  pruneopts = ""
+  revision = "39ef2aaf62df775b9c54a59957d113a0495cae73"
+  version = "v1.31.1"
+
+[[projects]]
+  digest = "1:0d049ff01749ce1d6092c85cb90a02dfdb3b401939b13415b7e608f36bc8ecee"
+  name = "google.golang.org/protobuf"
+  packages = [
+    "encoding/prototext",
+    "encoding/protowire",
+    "internal/descfmt",
+    "internal/descopts",
+    "internal/detrand",
+    "internal/encoding/defval",
+    "internal/encoding/messageset",
+    "internal/encoding/tag",
+    "internal/encoding/text",
+    "internal/errors",
+    "internal/fieldsort",
+    "internal/filedesc",
+    "internal/filetype",
+    "internal/flags",
+    "internal/genid",
+    "internal/impl",
+    "internal/mapsort",
+    "internal/pragma",
+    "internal/set",
+    "internal/strs",
+    "internal/version",
+    "proto",
+    "reflect/protoreflect",
+    "reflect/protoregistry",
+    "runtime/protoiface",
+    "runtime/protoimpl",
+    "types/known/anypb",
+    "types/known/durationpb",
+    "types/known/timestamppb",
+  ]
+  pruneopts = ""
+  revision = "3f7a61f89bb6813f89d981d1870ed68da0b3c3f1"
+  version = "v1.25.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/dafiti/echo-middleware",
     "github.com/go-sql-driver/mysql",
     "github.com/gorilla/sessions",
     "github.com/jmoiron/sqlx",
     "github.com/labstack/echo",
     "github.com/labstack/echo-contrib/session",
     "github.com/labstack/echo/middleware",
-    "github.com/newrelic/go-agent",
+    "github.com/newrelic/go-agent/v3/integrations/nrecho-v3",
+    "github.com/newrelic/go-agent/v3/integrations/nrmysql",
+    "github.com/newrelic/go-agent/v3/newrelic",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
