@@ -24,7 +24,6 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo-contrib/session"
-//	mw "github.com/dafiti/echo-middleware"
 	"github.com/labstack/echo/middleware"
 	"github.com/newrelic/go-agent/v3/newrelic"
 	"github.com/newrelic/go-agent/v3/integrations/nrecho-v3"
@@ -52,8 +51,6 @@ func init() {
 	crand.Read(seedBuf)
 	rand.Seed(int64(binary.LittleEndian.Uint64(seedBuf)))
 
-	ctx := newrelic.NewContext(context.Background())
-
 	db_host := os.Getenv("ISUBATA_DB_HOST")
 	if db_host == "" {
 		db_host = "127.0.0.1"
@@ -75,7 +72,7 @@ func init() {
 		db_user, db_password, db_host, db_port)
 
 	log.Printf("Connecting to db: %q", dsn)
-	db, _ = sqlx.Connect("nrmysql", dsn)
+	db, _ = sqlx.Connect("mysql", dsn)
 	for {
 		err := db.Ping()
 		if err == nil {
@@ -396,7 +393,6 @@ func getMessage(c echo.Context) error {
 	response := make([]map[string]interface{}, 0)
 	for i := len(messages) - 1; i >= 0; i-- {
 		m := messages[i]
-		// N + 1 ??
 		r, err := jsonifyMessage(m)
 		if err != nil {
 			return err
@@ -748,7 +744,6 @@ func main() {
 		}
 
 	e := echo.New()
-//	e.Use(mw.NewRelicWithApplication(newRelicApp))
 	e.Use(nrecho.Middleware(app))
 
 	funcs := template.FuncMap{
