@@ -248,7 +248,7 @@ func getInitialize(c echo.Context) error {
 	db.MustExec("DELETE FROM channel WHERE id > 10")
 	db.MustExec("DELETE FROM message WHERE id > 10000")
 	db.MustExec("DELETE FROM haveread")
-	err := rdb.FlushAll(ctx).Error()
+	err := rdb.FlushAll(ctx).Err()
 	if err != nil {
 		return c.String(500, "")
 	}
