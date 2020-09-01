@@ -24,3 +24,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/jmoiron/sqlx"
+
+[[constraint]]
+  name = "github.com/newrelic/go-agent"
+  version = "3.8.1"
