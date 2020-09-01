@@ -16,7 +16,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"context"
 
 	"github.com/go-sql-driver/mysql"
 	_ "github.com/newrelic/go-agent/v3/integrations/nrmysql"
